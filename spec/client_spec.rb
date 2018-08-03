@@ -143,6 +143,16 @@ describe Customerio::Client do
     end
   end
 
+  describe "#trigger_broadcast" do
+    it "sends a POST request to the customer.io's trigger broadcast API" do
+      stub_request(:post, api_uri('/api/v1/campaigns/5/triggers')).
+         with(:body => {:data =>{"promotion"=>"free"}}).
+         to_return(:status => 200, :body => "", :headers => {})
+
+      client.trigger_broadcast(5, { :data => { :promotion => "free" }})
+    end
+  end
+
   describe "#track" do
     it "raises an error if POST doesn't return a 2xx response code" do
       stub_request(:post, api_uri('/api/v1/customers/5/events')).

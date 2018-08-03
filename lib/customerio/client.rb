@@ -84,8 +84,12 @@ module Customerio
     def delete_device(customer_id, device_id)
       raise ParamError.new("customer_id must be a non-empty string") unless customer_id != "" and !customer_id.nil?
       raise ParamError.new("device_id must be a non-empty string") unless device_id != "" and !device_id.nil?
-      
+
       verify_response(request(:delete, device_id_path(customer_id, device_id)))
+    end
+
+    def trigger_broadcast(campaign_id, data = {})
+      verify_response(request(:post, trigger_broadcast_path(campaign_id), data))
     end
 
     private
@@ -132,6 +136,10 @@ module Customerio
 
     def unsuppress_path(customer_id)
       "/api/v1/customers/#{customer_id}/unsuppress"
+    end
+
+    def trigger_broadcast_path(campaign_id)
+      "/api/v1/campaigns/#{campaign_id}/triggers"
     end
 
     def valid_timestamp?(timestamp)
